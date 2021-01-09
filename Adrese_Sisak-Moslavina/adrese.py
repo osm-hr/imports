@@ -16,9 +16,19 @@ tag_unmatched = {}
 master_tags = ('addr:housenumber', 'source:addr', 'source:addr:date')
 
 def dataset(fileobj):
-    import logging
+    import re
     import json
-    
+
+    def normalize(string):
+        # Detect ALLCAPS
+        if re.match(r"^[A-Z\ ]+$", string):
+            normalized = string.title()
+            # Fix roman numerals I, II, III
+            normalized = re.sub(r"\bIi+\b", lambda m: m.group(0).upper(), normalized)
+            print("Normalizing", string, "->", normalized)
+            return normalized
+        return string
+
     data = []
     n = 0
     adrese = json.load(fileobj)
@@ -33,9 +43,9 @@ def dataset(fileobj):
                 'source:addr:date': '2021-01-01'
             }
         if p['properties']['UL_IME'] == p['properties']['NA_IME']:
-            tags['addr:place'] = p['properties']['NA_IME']
+            tags['addr:place'] = normalize(p['properties']['NA_IME'])
         else:
-            tags['addr:street'] = p['properties']['UL_IME']
+            tags['addr:street'] = normalize(p['properties']['UL_IME'])
         data.append(SourcePoint(n, float(p['geometry']['coordinates'][1]), float(p['geometry']['coordinates'][0]), tags))
         n += 1
 
