@@ -13,7 +13,7 @@ max_distance = 30
 
 tag_unmatched = {}
 
-master_tags = ('addr:housenumber')
+master_tags = ('addr:housenumber', 'source:addr', 'source:addr:date')
 
 def dataset(fileobj):
     import logging
@@ -29,7 +29,8 @@ def dataset(fileobj):
         #print(str(p['geometry']['coordinates'][0])+" : "+str(p['geometry']['coordinates'][1]))
         tags = {
                 'addr:housenumber': p['properties']['KB'],
-                'source': 'DGU'
+                'source:addr': 'DGU',
+                'source:addr:date': '2021-01-01'
             }
         if p['properties']['UL_IME'] == p['properties']['NA_IME']:
             tags['addr:place'] = p['properties']['NA_IME']
