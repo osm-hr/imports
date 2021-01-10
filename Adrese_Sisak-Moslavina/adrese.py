@@ -21,7 +21,7 @@ def dataset(fileobj):
 
     def normalize(string):
         # Detect ALLCAPS
-        if re.match(r"^[A-Z\ ]+$", string):
+        if re.match(r"^[A-Z\u0110\u0160\u010C\u0106\u017D\ ]+$", string):
             normalized = string.title()
             # Fix roman numerals I, II, III
             normalized = re.sub(r"\bIi+\b", lambda m: m.group(0).upper(), normalized)
