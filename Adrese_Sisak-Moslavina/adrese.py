@@ -22,7 +22,9 @@ def dataset(fileobj):
     def normalize(string):
         # Detect ALLCAPS
         if re.match(r"^[A-Z\u0110\u0160\u010C\u0106\u017D\ ]+$", string):
-            normalized = string.title()
+            exclude_set = set(['ulica', 'odvojak', 'cesta', 'avenija', 'trg', 'prilaz', 'naselja', 'novog', 'desni', 'lijevi', 'narodnih', 'učitelja', 'zelenila'])
+            split_string = string.split(' ')
+            normalized = ' '.join([split_string[0].title()] + [tt.title() if tt.lower() not in exclude_set else tt.lower() for tt in split_string[1:]])
             # Fix roman numerals I, II, III
             normalized = re.sub(r"\bIi+\b", lambda m: m.group(0).upper(), normalized)
             print("Normalizing", string, "->", normalized)
@@ -36,7 +38,8 @@ def dataset(fileobj):
         if p['geometry']['type'] != 'Point':
             print('Not a point')
             continue
-        #print(str(p['geometry']['coordinates'][0])+" : "+str(p['geometry']['coordinates'][1]))
+        if p['properties']['SRUSENO']=='DA':
+            continue
         tags = {
                 'addr:housenumber': p['properties']['KB'],
                 'source:addr': 'DGU',
