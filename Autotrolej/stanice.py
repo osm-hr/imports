@@ -32,7 +32,7 @@ def dataset(fileobj):
             print(splitstrings[1])
             tags = {
                 'gtfs:stop_id': splitstrings[0].replace('"',''),
-                'official_name': splitstrings[1].encode("utf-8"),
+                'official_name': (splitstrings[1].encode("utf-8")).decode('utf-8'),
             }
             data.append(SourcePoint(n, float(splitstrings[2]), float(splitstrings[3]), tags))
             n += 1
