@@ -1,4 +1,4 @@
-download_url = 'https://www.zet.hr/UserDocsImages/Dokumenti%20i%20obrasci%20za%20preuzimanje/GTFS%20-%2011.2020..zip'
+download_url = 'https://zet.hr/gtfs-scheduled/latest'
 
 no_dataset_id = True
 
@@ -40,8 +40,6 @@ def dataset(fileobj):
     return data
 
 def matches(osmtags, zettags):
-    if 'gtfs:stop_id' in osmtags:
-        return False
-    if osmtags['name'][0] != zettags['official_name'][0]:
+    if osmtags['official_name'] != zettags['official_name']:
         return False
     return True
